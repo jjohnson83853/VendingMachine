@@ -2,6 +2,9 @@
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -33,6 +36,19 @@ public class VendingMachineTest {
     public void noCoinsInserted() {
         final VendingMachine myVendingMachine = new VendingMachine();
         assertEquals("INSERT COIN.", myVendingMachine.getDisplay());
+    }
+
+
+    @Test
+    public void rejectInvalidCoins() {
+        final VendingMachine myVendingMachine = new VendingMachine();
+        try {
+            myVendingMachine.insertMoney(1.00);
+            fail();
+        } catch (RuntimeException re) {
+            Double myReturnCoins[] = {Double.valueOf(1.00)};
+            assertArrayEquals(myReturnCoins, myVendingMachine.removeCoinsFromCoinReturn().toArray());
+        }
     }
 
 }
