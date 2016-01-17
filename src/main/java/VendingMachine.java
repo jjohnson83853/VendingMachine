@@ -1,24 +1,52 @@
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by bullprog3 on 1/17/16.
  */
 public class VendingMachine {
 
+    public enum Coin {
+        QUARTER, NICKEL, DIME, DOLLAR
+    }
+
+    public enum Button {
+        COLA, CHIPS, CANDY
+    }
+
+    private final Map<Coin, Double> coinValues = new HashMap<Coin, Double>();
+    private final static Set<Coin> validCoins = new HashSet<Coin>();
+    private final static Map<Button, Double> productCost = new HashMap<Button, Double>();
+
     private double totalMoney;
-    private List<Double> coinReturn = new ArrayList<Double>();
-    private final static Set<Double> validCoins = new HashSet<Double>();
+    private List<Coin> coinReturn = new ArrayList<Coin>();
+    private Button selectedProduct = null;
 
     {
-        validCoins.add(.05);
-        validCoins.add(.25);
-        validCoins.add(.10);
+        validCoins.add(Coin.NICKEL);
+        validCoins.add(Coin.DIME);
+        validCoins.add(Coin.QUARTER);
+
+        coinValues.put(Coin.NICKEL, .05);
+        coinValues.put(Coin.DOLLAR, 1.0);
+        coinValues.put(Coin.DIME, .1);
+        coinValues.put(Coin.QUARTER, .25);
+
+        System.out.println("startup");
+        productCost.put(Button.CANDY, .65);
+        productCost.put(Button.CHIPS, .5);
+        productCost.put(Button.COLA, 1.0);
     }
-    public void pressButton(String button) {
+
+    public void pressButton(Button button) {
+        this.selectedProduct = button;
+    }
+
+    public Button retrieveProduct() {
+        if (totalMoney == productCost.get(this.selectedProduct)) {
+            return this.selectedProduct;
+        }
+        return null;
     }
 
     public String getDisplay() {
@@ -28,19 +56,18 @@ public class VendingMachine {
         return "INSERT COIN.";
     }
 
-    public void insertMoney(double money) {
+    public void insertMoney(Coin money) {
         if (validCoins.contains(money)) {
-            totalMoney += money;
+            totalMoney += coinValues.get(money);
         } else {
             coinReturn.add(money);
             throw new RuntimeException("Invalid Coin");
         }
-
     }
 
-    public List<Double> removeCoinsFromCoinReturn() {
-        final List<Double> myReturns = coinReturn;
-        coinReturn = new ArrayList<Double>();
+    public List<Coin> removeCoinsFromCoinReturn() {
+        final List<Coin> myReturns = coinReturn;
+        coinReturn = new ArrayList<Coin>();
         return myReturns;
     }
 }

@@ -15,17 +15,34 @@ public class VendingMachineTest {
     @Test
     public void selectCola() {
         final VendingMachine myVendingMachine = new VendingMachine();
-        myVendingMachine.pressButton("cola");
+        myVendingMachine.pressButton(VendingMachine.Button.COLA);
         assertEquals("INSERT COIN.", myVendingMachine.getDisplay());
+    }
+
+
+    @Test
+    public void dispenseCola() {
+        final VendingMachine myVendingMachine = new VendingMachine();
+        myVendingMachine.pressButton(VendingMachine.Button.COLA);
+        assertEquals("INSERT COIN.", myVendingMachine.getDisplay());
+        try {
+            myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
+            myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
+            myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
+            myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
+            assertEquals(VendingMachine.Button.COLA, myVendingMachine.retrieveProduct());
+        } catch (RuntimeException re) {
+            fail();
+        }
     }
 
     @Test
     public void payForCola() {
         final VendingMachine myVendingMachine = new VendingMachine();
-        myVendingMachine.pressButton("cola");
+        myVendingMachine.pressButton(VendingMachine.Button.COLA);
         assertEquals("INSERT COIN.", myVendingMachine.getDisplay());
         try {
-            myVendingMachine.insertMoney(.25);
+            myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
             assertEquals("$0.25", myVendingMachine.getDisplay());
         } catch (RuntimeException re) {
             fail();
@@ -43,10 +60,10 @@ public class VendingMachineTest {
     public void rejectInvalidCoins() {
         final VendingMachine myVendingMachine = new VendingMachine();
         try {
-            myVendingMachine.insertMoney(1.00);
+            myVendingMachine.insertMoney(VendingMachine.Coin.DOLLAR);
             fail();
         } catch (RuntimeException re) {
-            Double myReturnCoins[] = {Double.valueOf(1.00)};
+            VendingMachine.Coin myReturnCoins[] = {VendingMachine.Coin.DOLLAR};
             assertArrayEquals(myReturnCoins, myVendingMachine.removeCoinsFromCoinReturn().toArray());
         }
     }
