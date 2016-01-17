@@ -39,6 +39,21 @@ public class VendingMachineTest {
     }
 
     @Test
+    public void dispenseColaWithoutEnoughMoney() {
+        final VendingMachine myVendingMachine = new VendingMachine();
+        myVendingMachine.pressButton(VendingMachine.Button.COLA);
+        assertEquals(VendingMachine.INSERT_COIN, myVendingMachine.getDisplay());
+        try {
+            myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
+            myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
+            myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
+            assertNull(myVendingMachine.retrieveProduct());
+        } catch (RuntimeException re) {
+            fail();
+        }
+        assertEquals("$0.75", myVendingMachine.getDisplay());
+    }
+    @Test
     public void payForCola() {
         final VendingMachine myVendingMachine = new VendingMachine();
         myVendingMachine.pressButton(VendingMachine.Button.COLA);

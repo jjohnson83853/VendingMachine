@@ -43,7 +43,7 @@ public class VendingMachine {
 
     private static Map<Coin, Double> buildCoinValue()
     {
-        Map<Coin, Double> myCoinValue = new HashMap<Coin, Double>();
+        final Map<Coin, Double> myCoinValue = new HashMap<Coin, Double>();
         myCoinValue.put(Coin.NICKEL, .05);
         myCoinValue.put(Coin.DOLLAR, 1.0);
         myCoinValue.put(Coin.DIME, .1);
@@ -56,7 +56,7 @@ public class VendingMachine {
     }
 
     public Button retrieveProduct() {
-        if (totalMoney == productCost.get(this.selectedProduct)) {
+        if (this.totalMoney == this.productCost.get(this.selectedProduct)) {
             return this.selectedProduct;
         }
         return null;
@@ -76,9 +76,9 @@ public class VendingMachine {
 
     public void insertMoney(Coin money) {
         if (validCoins.contains(money)) {
-            totalMoney += coinValues.get(money);
+            this.totalMoney += coinValues.get(money);
         } else {
-            coinReturn.add(money);
+            this.coinReturn.add(money);
             throw new RuntimeException("Invalid Coin");
         }
     }
