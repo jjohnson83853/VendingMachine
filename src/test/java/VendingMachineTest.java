@@ -34,6 +34,7 @@ public class VendingMachineTest {
         } catch (RuntimeException re) {
             fail();
         }
+        assertEquals("THANK YOU", myVendingMachine.getDisplay());
     }
 
     @Test
@@ -67,5 +68,6 @@ public class VendingMachineTest {
             assertArrayEquals(myReturnCoins, myVendingMachine.removeCoinsFromCoinReturn().toArray());
         }
     }
+
 
 }

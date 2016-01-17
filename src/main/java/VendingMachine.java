@@ -50,6 +50,9 @@ public class VendingMachine {
     }
 
     public String getDisplay() {
+        if (this.selectedProduct != null && this.selectedProduct.equals(retrieveProduct())) {
+            return "THANK YOU";
+        }
         if (totalMoney > 0.00) {
             return NumberFormat.getCurrencyInstance().format(totalMoney);
         }
