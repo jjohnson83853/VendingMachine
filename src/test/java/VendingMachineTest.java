@@ -1,4 +1,5 @@
 
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -8,9 +9,21 @@ import static org.junit.Assert.*;
  */
 public class VendingMachineTest {
     @Test
-    public void selectProduct() {
+    public void selectCola() {
         final VendingMachine myVendingMachine = new VendingMachine();
         myVendingMachine.pressButton("cola");
         assertEquals("COLA SELECTED.", myVendingMachine.getDisplay());
+    }
+
+    @Test
+    public void payForCola() {
+        final VendingMachine myVendingMachine = new VendingMachine();
+        myVendingMachine.pressButton("cola");
+        assertEquals("COLA SELECTED.", myVendingMachine.getDisplay());
+        try {
+            myVendingMachine.insertMoney(1.00);
+        } catch (RuntimeException re) {
+            fail();
+        }
     }
 }

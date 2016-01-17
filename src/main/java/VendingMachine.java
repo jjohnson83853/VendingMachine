@@ -10,4 +10,7 @@ public class VendingMachine {
     public String getDisplay() {
         return "COLA SELECTED.";
     }
+
+    public void insertMoney(double money) {
+    }
 }
