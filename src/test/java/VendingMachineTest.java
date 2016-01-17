@@ -16,7 +16,7 @@ public class VendingMachineTest {
     public void selectCola() {
         final VendingMachine myVendingMachine = new VendingMachine();
         myVendingMachine.pressButton(VendingMachine.Button.COLA);
-        assertEquals("INSERT COIN.", myVendingMachine.getDisplay());
+        assertEquals(VendingMachine.INSERT_COIN, myVendingMachine.getDisplay());
     }
 
 
@@ -24,7 +24,7 @@ public class VendingMachineTest {
     public void dispenseCola() {
         final VendingMachine myVendingMachine = new VendingMachine();
         myVendingMachine.pressButton(VendingMachine.Button.COLA);
-        assertEquals("INSERT COIN.", myVendingMachine.getDisplay());
+        assertEquals(VendingMachine.INSERT_COIN, myVendingMachine.getDisplay());
         try {
             myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
             myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
@@ -34,14 +34,15 @@ public class VendingMachineTest {
         } catch (RuntimeException re) {
             fail();
         }
-        assertEquals("THANK YOU", myVendingMachine.getDisplay());
+        assertEquals(VendingMachine.THANK_YOU, myVendingMachine.getDisplay());
+        assertEquals(VendingMachine.INSERT_COIN, myVendingMachine.getDisplay());
     }
 
     @Test
     public void payForCola() {
         final VendingMachine myVendingMachine = new VendingMachine();
         myVendingMachine.pressButton(VendingMachine.Button.COLA);
-        assertEquals("INSERT COIN.", myVendingMachine.getDisplay());
+        assertEquals(VendingMachine.INSERT_COIN, myVendingMachine.getDisplay());
         try {
             myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
             assertEquals("$0.25", myVendingMachine.getDisplay());
@@ -53,7 +54,7 @@ public class VendingMachineTest {
     @Test
     public void noCoinsInserted() {
         final VendingMachine myVendingMachine = new VendingMachine();
-        assertEquals("INSERT COIN.", myVendingMachine.getDisplay());
+        assertEquals(VendingMachine.INSERT_COIN, myVendingMachine.getDisplay());
     }
 
 

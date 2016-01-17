@@ -6,6 +6,9 @@ import java.util.*;
  */
 public class VendingMachine {
 
+    protected static final String THANK_YOU = "THANK YOU";
+    protected static final String INSERT_COIN = "INSERT COIN.";
+
     public enum Coin {
         QUARTER, NICKEL, DIME, DOLLAR
     }
@@ -14,28 +17,38 @@ public class VendingMachine {
         COLA, CHIPS, CANDY
     }
 
-    private final Map<Coin, Double> coinValues = new HashMap<Coin, Double>();
-    private final static Set<Coin> validCoins = new HashSet<Coin>();
-    private final static Map<Button, Double> productCost = new HashMap<Button, Double>();
+    private final Map<Coin, Double> coinValues = buildCoinValue();
+    private final static Set<Coin> validCoins = buildValidCoins();
+    private final static Map<Button, Double> productCost = buildProductCost();
 
     private double totalMoney;
     private List<Coin> coinReturn = new ArrayList<Coin>();
     private Button selectedProduct = null;
 
+    private static Set<Coin> buildValidCoins() {
+        final Set<Coin> myValidCoins = new HashSet<Coin>();
+        myValidCoins.add(Coin.NICKEL);
+        myValidCoins.add(Coin.DIME);
+        myValidCoins.add(Coin.QUARTER);
+        return myValidCoins;
+    }
+
+    private static Map<Button, Double> buildProductCost() {
+        final Map<Button, Double> myProductCost = new HashMap<Button, Double>();
+        myProductCost.put(Button.CANDY, .65);
+        myProductCost.put(Button.CHIPS, .5);
+        myProductCost.put(Button.COLA, 1.0);
+        return myProductCost;
+    }
+
+    private static Map<Coin, Double> buildCoinValue()
     {
-        validCoins.add(Coin.NICKEL);
-        validCoins.add(Coin.DIME);
-        validCoins.add(Coin.QUARTER);
-
-        coinValues.put(Coin.NICKEL, .05);
-        coinValues.put(Coin.DOLLAR, 1.0);
-        coinValues.put(Coin.DIME, .1);
-        coinValues.put(Coin.QUARTER, .25);
-
-        System.out.println("startup");
-        productCost.put(Button.CANDY, .65);
-        productCost.put(Button.CHIPS, .5);
-        productCost.put(Button.COLA, 1.0);
+        Map<Coin, Double> myCoinValue = new HashMap<Coin, Double>();
+        myCoinValue.put(Coin.NICKEL, .05);
+        myCoinValue.put(Coin.DOLLAR, 1.0);
+        myCoinValue.put(Coin.DIME, .1);
+        myCoinValue.put(Coin.QUARTER, .25);
+        return myCoinValue;
     }
 
     public void pressButton(Button button) {
@@ -50,13 +63,15 @@ public class VendingMachine {
     }
 
     public String getDisplay() {
+        String myResult = INSERT_COIN;
         if (this.selectedProduct != null && this.selectedProduct.equals(retrieveProduct())) {
-            return "THANK YOU";
+            this.selectedProduct = null;
+            this.totalMoney = 0.00;
+            myResult = THANK_YOU;
+        } else if (this.totalMoney > 0.00) {
+            myResult = NumberFormat.getCurrencyInstance().format(totalMoney);
         }
-        if (totalMoney > 0.00) {
-            return NumberFormat.getCurrencyInstance().format(totalMoney);
-        }
-        return "INSERT COIN.";
+        return myResult;
     }
 
     public void insertMoney(Coin money) {
