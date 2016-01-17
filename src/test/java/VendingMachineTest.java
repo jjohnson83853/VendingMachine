@@ -13,19 +13,26 @@ public class VendingMachineTest {
     public void selectCola() {
         final VendingMachine myVendingMachine = new VendingMachine();
         myVendingMachine.pressButton("cola");
-        assertEquals("COLA SELECTED.", myVendingMachine.getDisplay());
+        assertEquals("INSERT COIN.", myVendingMachine.getDisplay());
     }
 
     @Test
     public void payForCola() {
         final VendingMachine myVendingMachine = new VendingMachine();
         myVendingMachine.pressButton("cola");
-        assertEquals("COLA SELECTED.", myVendingMachine.getDisplay());
+        assertEquals("INSERT COIN.", myVendingMachine.getDisplay());
         try {
-            myVendingMachine.insertMoney(1.00);
-            assertEquals("$1.00", myVendingMachine.getDisplay());
+            myVendingMachine.insertMoney(.25);
+            assertEquals("$0.25", myVendingMachine.getDisplay());
         } catch (RuntimeException re) {
             fail();
         }
     }
+
+    @Test
+    public void noCoinsInserted() {
+        final VendingMachine myVendingMachine = new VendingMachine();
+        assertEquals("INSERT COIN.", myVendingMachine.getDisplay());
+    }
+
 }

@@ -14,10 +14,10 @@ public class VendingMachine {
         if (totalMoney > 0.00) {
             return NumberFormat.getCurrencyInstance().format(totalMoney);
         }
-        return "COLA SELECTED.";
+        return "INSERT COIN.";
     }
 
     public void insertMoney(double money) {
-        ++totalMoney;
+        totalMoney += money;
     }
 }
