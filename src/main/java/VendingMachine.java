@@ -21,7 +21,7 @@ public class VendingMachine {
     private final static Set<Coin> validCoins = buildValidCoins();
     private final static Map<Button, Double> productCost = buildProductCost();
 
-    private double totalMoney;
+    private double totalMoney = 0.00;
     private List<Coin> coinReturn = new ArrayList<Coin>();
     private Button selectedProduct = null;
 
@@ -56,15 +56,24 @@ public class VendingMachine {
     }
 
     public Button retrieveProduct() {
-        if (this.totalMoney == this.productCost.get(this.selectedProduct)) {
+        if (canRetrieveProduct()) {
             return this.selectedProduct;
         }
         return null;
     }
 
+    private boolean canRetrieveProduct() {
+        if (selectedProduct != null) {
+            final double myProductCosts = this.productCost.get(this.selectedProduct);
+            return (this.totalMoney >= myProductCosts);
+        }
+        return false;
+    }
+
     public String getDisplay() {
         String myResult = INSERT_COIN;
-        if (this.selectedProduct != null && this.selectedProduct.equals(retrieveProduct())) {
+        if (canRetrieveProduct()) {
+            applyChangeToCoinReturn();
             this.selectedProduct = null;
             this.totalMoney = 0.00;
             myResult = THANK_YOU;
@@ -88,4 +97,23 @@ public class VendingMachine {
         coinReturn = new ArrayList<Coin>();
         return myReturns;
     }
+
+    private void applyChangeToCoinReturn() {
+        int myQuarters = Double.valueOf((totalMoney - this.productCost.get(this.selectedProduct)) / .25).intValue();
+        for (int i = 0; i < myQuarters; ++i) {
+            coinReturn.add(Coin.QUARTER);
+            totalMoney -= .25;
+        }
+        int myDimes = Double.valueOf((totalMoney - this.productCost.get(this.selectedProduct)) / .1).intValue();
+        for (int i = 0; i < myDimes; ++i) {
+            coinReturn.add(Coin.DIME);
+            totalMoney -= .1;
+        }
+        int myNickels = Double.valueOf((totalMoney - this.productCost.get(this.selectedProduct)) / .05).intValue();
+        for (int i = 0; i < myNickels; ++i) {
+            coinReturn.add(Coin.NICKEL);
+            totalMoney -= .05;
+        }
+    }
+
 }

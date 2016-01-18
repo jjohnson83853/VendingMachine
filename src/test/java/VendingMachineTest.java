@@ -39,6 +39,33 @@ public class VendingMachineTest {
     }
 
     @Test
+    public void dispenseColaPlusChange() {
+        final VendingMachine myVendingMachine = new VendingMachine();
+        myVendingMachine.pressButton(VendingMachine.Button.COLA);
+        assertEquals(VendingMachine.INSERT_COIN, myVendingMachine.getDisplay());
+        try {
+            myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
+            myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
+            myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
+            myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
+            myVendingMachine.insertMoney(VendingMachine.Coin.QUARTER);
+            myVendingMachine.insertMoney(VendingMachine.Coin.NICKEL);
+            myVendingMachine.insertMoney(VendingMachine.Coin.DIME);
+            assertEquals(VendingMachine.Button.COLA, myVendingMachine.retrieveProduct());
+        } catch (RuntimeException re) {
+            fail();
+        }
+        assertEquals(VendingMachine.THANK_YOU, myVendingMachine.getDisplay());
+
+        final List<VendingMachine.Coin> myCoins = myVendingMachine.removeCoinsFromCoinReturn();
+        assertEquals(3, myCoins.size());
+        assertEquals(VendingMachine.Coin.QUARTER, myCoins.get(0));
+        assertEquals(VendingMachine.Coin.NICKEL, myCoins.get(2));
+        assertEquals(VendingMachine.Coin.DIME, myCoins.get(1));
+
+        assertEquals(VendingMachine.INSERT_COIN, myVendingMachine.getDisplay());
+    }
+    @Test
     public void dispenseColaWithoutEnoughMoney() {
         final VendingMachine myVendingMachine = new VendingMachine();
         myVendingMachine.pressButton(VendingMachine.Button.COLA);
